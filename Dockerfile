@@ -2,7 +2,7 @@ FROM node:latest as angular
 
 WORKDIR /usr/local/app
 
-COPY package*.json .
+COPY package*.json /usr/local/app/
 
 RUN npm install
 
