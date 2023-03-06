@@ -8,7 +8,7 @@ pipeline {
     }
     stage('Build') {
       steps {
-        withDockerRegistry(credentialsId: 'dockerhub-ang-supabase', url: 'https://index.docker.io/v1/') {
+        withDockerRegistry(credentialsId: 'dockerhub-ang-supabase', url: 'https://hub.docker.com/') {
           sh 'docker build -t tuanna18042000/ang-supabase:latest .'
           sh 'docker push tuanna18042000/ang-supabase:latest'
         }
