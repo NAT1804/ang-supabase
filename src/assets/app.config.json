@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "production": false,
+  "baseAPIUrl": "http://localhost:6868/api/",
+  "authAPIUrl":  "http://localhost:6868/api/auth/",
+  "userAPIUrl":  "http://localhost:6868/api/test/"
+}

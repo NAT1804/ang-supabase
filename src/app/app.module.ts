@@ -1,30 +1,41 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
+import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-import { BoardAdminComponent } from './board-admin/board-admin.component';
-import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
-import { BoardUserComponent } from './board-user/board-user.component';
-import { httpInterceptorProviders } from './_services/http.interceptor';
+import { HomeComponent } from './components/home/home.component';
+import { HttpRequestInterceptor } from './shared/services/http-interceptor/http.interceptor';
+import { ErrorLogInterceptor } from './shared/services/http-interceptor/error-log.interceptor';
+import { AppConfigService, appConfigInit } from './shared/services/configure/configure.service';
+import { DynamicEnvironmentService } from './shared/services/configure/dynamic-environment.service';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    RegisterComponent,
-    HomeComponent,
-    ProfileComponent,
-    BoardAdminComponent,
-    BoardModeratorComponent,
-    BoardUserComponent,
+  declarations: [AppComponent, HomeComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    SharedModule,
   ],
-  imports: [BrowserModule, AppRoutingModule],
-  providers: [httpInterceptorProviders],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appConfigInit,
+      multi: true,
+      deps: [AppConfigService]
+    },
+    DynamicEnvironmentService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpRequestInterceptor,
+      multi: true,
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorLogInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
