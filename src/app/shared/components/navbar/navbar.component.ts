@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../services/storage/storage.service';
 import { AuthService } from '../../services/auth/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { EventBusService } from '../../services/event-bus/event-bus.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,10 +15,12 @@ export class NavbarComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username?: string;
+  eventBusSub?: Subscription
 
   constructor(
     private storageService: StorageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private eventBusService: EventBusService
   ) {}
 
   ngOnInit(): void {
@@ -34,11 +37,16 @@ export class NavbarComponent implements OnInit {
         this.username = user.username;
       }
     });
+
+    this.eventBusSub = this.eventBusService.on('logout', () => {
+      console.log('listen event logout')
+      this.logout()
+    })
   }
 
   logout(): void {
     this.authService.logout().subscribe({
-      next: (res) => {
+      next: _ => {
         this.storageService.clean();
       },
       error: (err) => {

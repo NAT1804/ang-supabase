@@ -22,13 +22,13 @@ import { DynamicEnvironmentService } from './shared/services/configure/dynamic-e
     SharedModule,
   ],
   providers: [
+    DynamicEnvironmentService,
     {
       provide: APP_INITIALIZER,
       useFactory: appConfigInit,
       multi: true,
       deps: [AppConfigService]
     },
-    DynamicEnvironmentService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpRequestInterceptor,
