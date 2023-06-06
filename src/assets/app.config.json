@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "production": false,
-  "baseAPIUrl": "http://localhost:6868/api/",
-  "authAPIUrl":  "http://localhost:6868/api/auth/",
-  "userAPIUrl":  "http://localhost:6868/api/test/"
+  "baseAPIUrl": "https://express-jwt-0c61.onrender.com/api/",
+  "authAPIUrl":  "https://express-jwt-0c61.onrender.com/api/auth/",
+  "userAPIUrl":  "https://express-jwt-0c61.onrender.com/api/test/"
 }
