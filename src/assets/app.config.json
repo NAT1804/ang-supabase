@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "production": true,
-  "baseAPIUrl": "https://express-jwt-0c61.onrender.com//api/",
-  "authAPIUrl":  "https://express-jwt-0c61.onrender.com//api/auth/",
-  "userAPIUrl":  "https://express-jwt-0c61.onrender.com//api/test/"
+  "baseAPIUrl": "https://express-jwt-0c61.onrender.com/api/",
+  "authAPIUrl":  "https://express-jwt-0c61.onrender.com/api/auth/",
+  "userAPIUrl":  "https://express-jwt-0c61.onrender.com/api/test/"
 }
