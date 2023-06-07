@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
+
 import { DynamicEnvironmentService } from '../configure/dynamic-environment.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +11,10 @@ import { DynamicEnvironmentService } from '../configure/dynamic-environment.serv
 export class AuthService {
   AUTH_API: string;
 
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-  };
   constructor(
     private http: HttpClient,
-    private dynamicEnvironmentService: DynamicEnvironmentService
+    private dynamicEnvironmentService: DynamicEnvironmentService,
+    private router: Router
   ) {
     this.AUTH_API = this.dynamicEnvironmentService.getConfig().authAPIUrl;
   }
@@ -26,7 +26,7 @@ export class AuthService {
         username,
         password,
       },
-      this.httpOptions
+      { headers: this.createDefaultHeaders() }
     );
   }
 
@@ -38,19 +38,31 @@ export class AuthService {
         email,
         password,
       },
-      this.httpOptions
+      { headers: this.createDefaultHeaders() }
     );
   }
 
   logout(): Observable<any> {
-    return this.http.post(this.AUTH_API + 'signout', {}, this.httpOptions);
+    return this.http
+      .post(
+        this.AUTH_API + 'signout',
+        {},
+        { headers: this.createDefaultHeaders() }
+      )
+      .pipe(switchMap((_) => this.router.navigate(['home'])));
   }
 
-  refreshToken(token: string | null) {
+  refreshToken(token: string | null): Observable<any> {
     return this.http.post(
       this.AUTH_API + 'refreshtoken',
       { refreshToken: token },
-      this.httpOptions
+      { headers: this.createDefaultHeaders() }
     );
+  }
+
+  private createDefaultHeaders() {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
   }
 }

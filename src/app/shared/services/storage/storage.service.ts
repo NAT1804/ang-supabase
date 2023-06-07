@@ -18,7 +18,7 @@ export class StorageService {
     this.isLoggedInSubject$.asObservable();
 
   constructor() {
-    const user = window.sessionStorage.getItem(USER_KEY);
+    const user = window.localStorage.getItem(USER_KEY);
     if (user) {
       this.isLoggedInSubject$.next(true);
     } else {
@@ -27,13 +27,13 @@ export class StorageService {
   }
 
   clean(): void {
-    window.sessionStorage.clear();
+    window.localStorage.clear();
     this.isLoggedInSubject$.next(false);
   }
 
   public saveToken(token: string): void {
-    window.sessionStorage.removeItem(TOKEN_KEY);
-    window.sessionStorage.setItem(TOKEN_KEY, token);
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.setItem(TOKEN_KEY, token);
 
     const user = this.getUser();
     if (user.id) {
@@ -42,26 +42,26 @@ export class StorageService {
   }
 
   public getToken(): string | null {
-    return window.sessionStorage.getItem(TOKEN_KEY);
+    return window.localStorage.getItem(TOKEN_KEY);
   }
 
   public saveRefreshToken(token: string): void {
-    window.sessionStorage.removeItem(REFRESH_TOKEN_KEY);
-    window.sessionStorage.setItem(REFRESH_TOKEN_KEY, token);
+    window.localStorage.removeItem(REFRESH_TOKEN_KEY);
+    window.localStorage.setItem(REFRESH_TOKEN_KEY, token);
   }
 
   public getRefreshToken(): string | null {
-    return window.sessionStorage.getItem(REFRESH_TOKEN_KEY);
+    return window.localStorage.getItem(REFRESH_TOKEN_KEY);
   }
 
   public saveUser(user: any): void {
-    window.sessionStorage.removeItem(USER_KEY);
-    window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+    window.localStorage.removeItem(USER_KEY);
+    window.localStorage.setItem(USER_KEY, JSON.stringify(user));
     this.isLoggedInSubject$.next(true);
   }
 
   public getUser(): any {
-    const user = window.sessionStorage.getItem(USER_KEY);
+    const user = window.localStorage.getItem(USER_KEY);
     if (user) {
       return JSON.parse(user);
     }

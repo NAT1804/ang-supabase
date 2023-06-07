@@ -4,10 +4,9 @@ import {
   HttpInterceptor,
   HttpHandler,
   HttpRequest,
-  HTTP_INTERCEPTORS,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, switchMap, throwError } from 'rxjs';
+import { Observable, catchError, switchMap, throwError } from 'rxjs';
 
 import { StorageService } from '../storage/storage.service';
 import { EventBusService } from '../event-bus/event-bus.service';
@@ -17,7 +16,6 @@ import { AuthService } from '../auth/auth.service';
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {
   private isRefreshing = false;
-  private refreshTokenSubject$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
     private storageService: StorageService,
@@ -51,14 +49,14 @@ export class HttpRequestInterceptor implements HttpInterceptor {
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
-      this.refreshTokenSubject$.next(null);
 
       const token = this.storageService.getRefreshToken();
 
       if (this.storageService.isLoggedIn()) {
         return this.authService.refreshToken(token).pipe(
-          switchMap(() => {
+          switchMap((token) => {
             this.isRefreshing = false;
+            this.storageService.saveToken(token.accessToken);
             return next.handle(request);
           }),
           catchError((error) => {

@@ -39,7 +39,6 @@ export class NavbarComponent implements OnInit {
     });
 
     this.eventBusSub = this.eventBusService.on('logout', () => {
-      console.log('listen event logout')
       this.logout()
     })
   }

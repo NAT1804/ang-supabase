@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DynamicEnvironmentService } from '../configure/dynamic-environment.service';
 
@@ -16,18 +16,36 @@ export class UserService {
   }
 
   getPublicContent(): Observable<any> {
-    return this.http.get(this.API_URL + 'all', { responseType: 'text' });
+    return this.http.get(this.API_URL + 'all', {
+      headers: this.createDefaultHeaders(),
+      responseType: 'text',
+    });
   }
 
   getUserBoard(): Observable<any> {
-    return this.http.get(this.API_URL + 'user', { responseType: 'text' });
+    return this.http.get(this.API_URL + 'user', {
+      headers: this.createDefaultHeaders(),
+      responseType: 'text',
+    });
   }
 
   getModeratorBoard(): Observable<any> {
-    return this.http.get(this.API_URL + 'mod', { responseType: 'text' });
+    return this.http.get(this.API_URL + 'mod', {
+      headers: this.createDefaultHeaders(),
+      responseType: 'text',
+    });
   }
 
   getAdminBoard(): Observable<any> {
-    return this.http.get(this.API_URL + 'admin', { responseType: 'text' });
+    return this.http.get(this.API_URL + 'admin', {
+      headers: this.createDefaultHeaders(),
+      responseType: 'text',
+    });
+  }
+
+  private createDefaultHeaders() {
+    return new HttpHeaders({
+      'Content-Type': 'text/plain; charset=utf-8',
+    });
   }
 }
